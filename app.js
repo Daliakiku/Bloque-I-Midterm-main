@@ -16,8 +16,8 @@ renderer.setClearColor("#0a0c2c");
 const camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.1, 1000);
 
 // 3.1 Configurar mesh.
-const geo = new THREE.TorusKnotGeometry(1, 0.35, 128, 5, 2);
-// const geo = new THREE.SphereGeometry(1.5, 128, 128);
+//const geo = new THREE.TorusKnotGeometry(1, 0.35, 128, 5, 2);
+const geo = new THREE.SphereGeometry(1.5, 80, 80);
 
 const material = new THREE.MeshStandardMaterial({
     color: "#ffffff",
@@ -41,8 +41,93 @@ scene.add(rimLight);
 ///////// EN CLASE.
 
 //// A) Cargar múltiples texturas.
+// 1. "Loading manager".
+const manager = new THREE.LoadingManager(); //create loading manager
+
+//define local functions for different manager events
+manager.onStart = function (url, itemsLoaded, itemsTotal) {
+   console.log(`Iniciando carga de: ${url} (${itemsLoaded + 1}/${itemsTotal})`);
+};
+
+manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+   console.log(`Cargando: ${url} (${itemsLoaded}/${itemsTotal})`);
+};
+
+manager.onLoad = function () {
+   console.log('✅ ¡Todas las texturas cargadas!');
+   createMaterial();
+};
+
+manager.onError = function (url) {
+   console.error(`❌ Error al cargar: ${url}`);
+};
+
+// 2. "Texture loader" para nuestros assets.
+const loader = new THREE.TextureLoader(manager); //this is calling the funtions we just created in the loading manager
+
+// 3. Cargamos texturas guardadas en el folder del proyecto.
+const tex = {
+   albedo: loader.load('./assets/texturas/bricks/albedo.png'), //base color
+   ao: loader.load('./assets/texturas/bricks/ao.png'), //ambient occlusion, luces y sombras
+   metalness: loader.load('./assets/texturas/bricks/metallic.png'), //what it sounds like
+   normal: loader.load('./assets/texturas/bricks/normal.png'), //uhhhhh
+   roughness: loader.load('./assets/texturas/bricks/roughness.png'), //applies to metalic objects
+   displacement: loader.load('./assets/texturas/bricks/displacement.png'), //extrusion/3d values of texture
+};
+
+// 4. Definimos variables y la función que va a crear el material al cargar las texturas.
+var pbrMaterial; //create variable that will hold the material
+
+function createMaterial() { 
+   pbrMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
+       map: tex.albedo, //albedo variable inside the tex object
+       aoMap: tex.ao,
+       metalnessMap: tex.metalness,
+       normalMap: tex.normal,
+       roughnessMap: tex.roughness,
+       displacementMap: tex.displacement,
+       displacementScale: 0.8, //how much extrusion
+       side: THREE.FrontSide, //which side of the faces to renders
+       // wireframe: true,
+   });
+
+   mesh.material = pbrMaterial;
+}
+
+
 
 //// B) Rotación al scrollear.
+// 1. Crear un objeto con la data referente al SCROLL para ocuparla en todos lados.
+var scroll = {
+    //create and define variables
+    x: 0, //raw x value
+    lerpedX: 0, //smoothed x value
+    speed: 0.005, //scroll speed
+    cof: 0.07 //coeficient of friction
+ };
+ 
+ // 2. Escuchar el evento scroll y actualizar el valor del scroll.
+ function updateScrollData(eventData) {
+    scroll.x += eventData.deltaY * scroll.speed; //update raw y value based on scroll
+ }
+ 
+ window.addEventListener("wheel", updateScrollData);
+
+//  // 3. Aplicar el valor del scroll a la rotación del mesh. (en el loop de animación)
+// function updateMeshRotation() {
+//     mesh.rotation.x = scroll.x;
+//  }
+
+function updateMeshRotation() {
+    mesh.rotation.x = scroll.lerpedX;
+ }
+  
+ // 5. Vamos a suavizar un poco el valor de rotación para que los cambios de dirección sean menos bruscos.
+function lerpScrollX() {
+    scroll.lerpedX += (scroll.x - scroll.lerpedX) * scroll.cof;
+ }
+ 
+
 
 //// C) Movimiento de cámara con mouse (fricción) aka "Gaze Camera".
 
@@ -54,9 +139,12 @@ scene.add(rimLight);
 function animate() {
     requestAnimationFrame(animate);
 
-    mesh.rotation.x -= 0.005;
+    mesh.rotation.y -= 0.005;
 
+    lerpScrollX();
+    updateMeshRotation();
     renderer.render(scene, camera);
 }
 
 animate();
+
