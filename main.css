@@ -14,6 +14,35 @@
     color: aqua;
 }
 
+button {
+    border: none;
+    color: aqua;
+    font-family: "Formula", sans-serif;
+    text-transform: uppercase;
+    font-size: 2vh;
+    cursor: pointer;
+    padding: 1vh 2vh;
+    border: 0.3vh solid aqua;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: aqua;
+    color: #2020cc;
+}
+
+#btn1 {
+    position: relative;
+    z-index: 10;
+    background-color:rgb(70, 121, 165);
+}
+
+#btn2 {
+    position: relative;
+    z-index: 10;
+    background-color:rgb(184, 115, 19);
+}
+
 #lienzo {
     position: fixed;
     top: 0; left: 0;
