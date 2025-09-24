@@ -17,7 +17,8 @@ const camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.1
 
 // 3.1 Configurar mesh.
 //const geo = new THREE.TorusKnotGeometry(1, 0.35, 128, 5, 2);
-const geo = new THREE.SphereGeometry(1.5, 80, 80);
+//const geo = new THREE.SphereGeometry(1.5, 80, 80);
+const geo = new THREE.TorusGeometry( 1, 0.5, 16, 100 );
 
 const material = new THREE.MeshStandardMaterial({
     color: "#ffffff",
@@ -66,19 +67,48 @@ manager.onError = function (url) {
 const loader = new THREE.TextureLoader(manager); //this is calling the funtions we just created in the loading manager
 
 // 3. Cargamos texturas guardadas en el folder del proyecto.
-const tex = {
-   albedo: loader.load('./assets/texturas/bricks/albedo.png'), //base color
-   ao: loader.load('./assets/texturas/bricks/ao.png'), //ambient occlusion, luces y sombras
-   metalness: loader.load('./assets/texturas/bricks/metallic.png'), //what it sounds like
-   normal: loader.load('./assets/texturas/bricks/normal.png'), //uhhhhh
-   roughness: loader.load('./assets/texturas/bricks/roughness.png'), //applies to metalic objects
-   displacement: loader.load('./assets/texturas/bricks/displacement.png'), //extrusion/3d values of texture
-};
+//BRICKS
+// const tex = {
+//    albedo: loader.load('./assets/texturas/bricks/albedo.png'), //base color
+//    ao: loader.load('./assets/texturas/bricks/ao.png'), //ambient occlusion, luces y sombras
+//    metalness: loader.load('./assets/texturas/bricks/metallic.png'), //what it sounds like
+//    normal: loader.load('./assets/texturas/bricks/normal.png'), //uhhhhh
+//    roughness: loader.load('./assets/texturas/bricks/roughness.png'), //applies to metalic objects
+//    displacement: loader.load('./assets/texturas/bricks/displacement.png'), //extrusion/3d values of texture
+// };
 
+//METAL PANELS
+const tex = {
+   albedo: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_albedo.png'), //base color
+   ao: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_ao.png'), //ambient occlusion, luces y sombras
+   metalness: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_metallic.png'), //what it sounds like
+   normal: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_normal-ogl.png'), //uhhhhh
+   roughness: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_roughness.png'), //applies to metalic objects
+   displacement: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_height.png'), //extrusion/3d values of texture
+};
 // 4. Definimos variables y la función que va a crear el material al cargar las texturas.
 var pbrMaterial; //create variable that will hold the material
 
-function createMaterial() { 
+
+//BRICKS
+// function createMaterial() { 
+//    pbrMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
+//        map: tex.albedo, //albedo variable inside the tex object
+//        aoMap: tex.ao,
+//        metalnessMap: tex.metalness,
+//        normalMap: tex.normal,
+//        roughnessMap: tex.roughness,
+//        displacementMap: tex.displacement,
+//        displacementScale: 0.8, //how much extrusion
+//        side: THREE.FrontSide, //which side of the faces to renders
+//        // wireframe: true,
+//    });
+
+//    mesh.material = pbrMaterial;
+// }
+
+//PANELS
+function createMaterial() {
    pbrMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
        map: tex.albedo, //albedo variable inside the tex object
        aoMap: tex.ao,
@@ -86,7 +116,7 @@ function createMaterial() {
        normalMap: tex.normal,
        roughnessMap: tex.roughness,
        displacementMap: tex.displacement,
-       displacementScale: 0.8, //how much extrusion
+       displacementScale: 0.15, //how much extrusion
        side: THREE.FrontSide, //which side of the faces to renders
        // wireframe: true,
    });
