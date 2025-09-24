@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "vite": "^7.1.7"
+  },
+  "name": "bloque-i-midterm-main",
+  "version": "1.0.0",
+  "description": "Archivos base para el proyecto intermedio para evaluar bloque I",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daliakiku/Bloque-I-Midterm-main.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Daliakiku/Bloque-I-Midterm-main/issues"
+  },
+  "homepage": "https://github.com/Daliakiku/Bloque-I-Midterm-main#readme"
+}

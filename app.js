@@ -210,6 +210,23 @@ function updateCameraPosition() {
 
 ///////// FIN DE LA CLASE.
 
+//Make the mesh bigger when clicked
+function updateMeshScale() {
+    gsap.to(mesh.scale, { //use gsap to animate the scale of the mesh
+        x: 1.5,
+        y: 1.5,
+        z: 1.5,
+        duration: 0.5,
+        ease: "bounce.out",
+        //yoyo: true,
+        //repeat: 1
+    });
+}
+
+mesh.addEventListener("click", updateMeshScale);
+
+
+
 
 /////////
 // Final. Crear loop de animación para renderizar constantemente la escena.
