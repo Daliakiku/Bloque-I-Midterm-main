@@ -220,12 +220,26 @@ function updateMeshScale() {
         ease: "bounce.out",
         //yoyo: true,
         //repeat: 1
+         onComplete: () => { //when the animation is complete, scale it back down
+               gsap.to(mesh.scale, {
+                  x: 1,
+                  y: 1,
+                  z: 1,
+                  duration: 0.5,
+                  ease: "bounce.out",
+               });
+         }
     });
 }
 
-mesh.addEventListener("click", updateMeshScale);
+canvas.addEventListener("click", updateMeshScale);
 
-
+//turn on and off wireframe mode when "w" key is pressed
+window.addEventListener("keydown", (event) => {
+    if (event.key === "w") {
+        pbrMaterial.wireframe = !pbrMaterial.wireframe;
+    }
+});
 
 
 /////////
