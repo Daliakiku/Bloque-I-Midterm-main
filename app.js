@@ -141,7 +141,7 @@ var scroll = {
     scroll.x += eventData.deltaY * scroll.speed; //update raw y value based on scroll
  }
  
- window.addEventListener("wheel", updateScrollData);
+ window.addEventListener("wheel", updateScrollData); //sending "wheel" event data to the function we just created
 
 //  // 3. Aplicar el valor del scroll a la rotación del mesh. (en el loop de animación)
 // function updateMeshRotation() {
@@ -198,14 +198,29 @@ function updateMouseData(eventData) {
     mouse.normalOffset.x = ( (mouse.x - windowCenter.x) / canvas.width ) * 2;
     mouse.normalOffset.y = ( (mouse.y - windowCenter.y) / canvas.height ) * 2;
  }
+
+ // a) Suavizar movimiento de cámara.
+// 1. Incrementar gradualmente el valor de la distancia que vamos a usar para animar y lo guardamos en otro atributo. (en el loop de animación)
+ function lerpDistanceToCenter() {
+   mouse.lerpNormalOffset.x += (mouse.normalOffset.x - mouse.lerpNormalOffset.x) * mouse.cof;
+   mouse.lerpNormalOffset.y += (mouse.normalOffset.y - mouse.lerpNormalOffset.y) * mouse.cof;
+}
+
+// 2. Actualizar el nombre del atributo en la función que ya hicimos y que actualiza la posición de la cámara.
+
+function updateCameraPosition() {
+   camera.position.x = mouse.lerpNormalOffset.x * mouse.gazeRange.x;
+   camera.position.y = -mouse.lerpNormalOffset.y * mouse.gazeRange.y;
+}
+
  
  window.addEventListener("mousemove", updateMouseData);
  
  // 3. Aplicar valor calculado a la posición de la cámara. (en el loop de animación)
-function updateCameraPosition() {
-    camera.position.x = mouse.normalOffset.x * mouse.gazeRange.x;
-    camera.position.y = -mouse.normalOffset.y * mouse.gazeRange.y;
- }
+// function updateCameraPosition() {
+//     camera.position.x = mouse.normalOffset.x * mouse.gazeRange.x;
+//     camera.position.y = -mouse.normalOffset.y * mouse.gazeRange.y;
+//  }
  
 
 ///////// FIN DE LA CLASE.
@@ -241,7 +256,6 @@ window.addEventListener("keydown", (event) => {
     }
 });
 
-
 /////////
 // Final. Crear loop de animación para renderizar constantemente la escena.
 function animate() {
@@ -249,6 +263,7 @@ function animate() {
 
     mesh.rotation.y -= 0.005;
 
+    lerpDistanceToCenter();
     updateCameraPosition();
     camera.lookAt(mesh.position);
 
