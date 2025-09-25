@@ -252,15 +252,30 @@ canvas.addEventListener("click", updateMeshScale);
 //turn on and off wireframe mode when "w" key is pressed
 window.addEventListener("keydown", (event) => {
     if (event.key === "w") {
-        pbrMaterial.wireframe = !pbrMaterial.wireframe;
+      if (vine == true){
+         vineMaterial.wireframe = !vineMaterial.wireframe;
+      } else if (vine == false){
+         panelMaterial.wireframe = !panelMaterial.wireframe;
+      }
     }
 });
 
+let vine = false;
 //Make buttons to change textures
 const brickButton = document.getElementById("btn1");
-brickButton.addEventListener("click", createMaterial1, console.log("bricks"));
+brickButton.addEventListener("click", () => {
+      createMaterial1(), 
+      vine = true;
+      console.log(vine)
+   });
 const panelButton = document.getElementById("btn2");
-panelButton.addEventListener("click", createMaterial);
+panelButton.addEventListener("click", () => {
+      createMaterial(), 
+      vine = false;
+      console.log(vine)
+   }
+);
+
 
 /////////
 // Final. Crear loop de animación para renderizar constantemente la escena.
