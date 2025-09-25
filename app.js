@@ -68,17 +68,17 @@ const loader = new THREE.TextureLoader(manager); //this is calling the funtions 
 
 // 3. Cargamos texturas guardadas en el folder del proyecto.
 //BRICKS
-// const tex = {
-//    albedo: loader.load('./assets/texturas/bricks/albedo.png'), //base color
-//    ao: loader.load('./assets/texturas/bricks/ao.png'), //ambient occlusion, luces y sombras
-//    metalness: loader.load('./assets/texturas/bricks/metallic.png'), //what it sounds like
-//    normal: loader.load('./assets/texturas/bricks/normal.png'), //uhhhhh
-//    roughness: loader.load('./assets/texturas/bricks/roughness.png'), //applies to metalic objects
-//    displacement: loader.load('./assets/texturas/bricks/displacement.png'), //extrusion/3d values of texture
-// };
+const vineTex = {
+   albedo: loader.load('./assets/texturas/vines-bl/vines_albedo.png'), //base color
+   ao: loader.load('./assets/texturas/vines-bl/vines_ao.png'), //ambient occlusion, luces y sombras
+   metalness: loader.load('./assets/texturas/vines-bl/vines_metallic.png'), //what it sounds like
+   normal: loader.load('./assets/texturas/vines-bl/vines_normal-ogl.png'), //uhhhhh
+   roughness: loader.load('./assets/texturas/vines-bl/vines_roughness.png'), //applies to metalic objects
+   displacement: loader.load('./assets/texturas/vines-bl/vines_height.png'), //extrusion/3d values of texture
+};
 
 //METAL PANELS
-const tex = {
+const panelTex = {
    albedo: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_albedo.png'), //base color
    ao: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_ao.png'), //ambient occlusion, luces y sombras
    metalness: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_metallic.png'), //what it sounds like
@@ -86,44 +86,44 @@ const tex = {
    roughness: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_roughness.png'), //applies to metalic objects
    displacement: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_height.png'), //extrusion/3d values of texture
 };
-// 4. Definimos variables y la función que va a crear el material al cargar las texturas.
-var pbrMaterial; //create variable that will hold the material
 
+// 4. Definimos variables y la función que va a crear el material al cargar las texturas.
+var panelMaterial; //create variable that will hold the material
+//PANELS
+function createMaterial() { 
+   panelMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
+       map: panelTex.albedo, //albedo variable inside the panelTex object
+       aoMap: panelTex.ao,
+       metalnessMap: panelTex.metalness,
+       normalMap: panelTex.normal,
+       roughnessMap: panelTex.roughness,
+       displacementMap: panelTex.displacement,
+       displacementScale: 0.1, //how much extrusion
+       side: THREE.FrontSide, //which side of the faces to renders
+       // wireframe: true,
+   });
+
+   mesh.material = panelMaterial;
+}
 
 //BRICKS
-// function createMaterial() { 
-//    pbrMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
-//        map: tex.albedo, //albedo variable inside the tex object
-//        aoMap: tex.ao,
-//        metalnessMap: tex.metalness,
-//        normalMap: tex.normal,
-//        roughnessMap: tex.roughness,
-//        displacementMap: tex.displacement,
-//        displacementScale: 0.8, //how much extrusion
-//        side: THREE.FrontSide, //which side of the faces to renders
-//        // wireframe: true,
-//    });
+var vineMaterial; //create variable that will hold the material
 
-//    mesh.material = pbrMaterial;
-// }
-
-//PANELS
-function createMaterial() {
-   pbrMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
-       map: tex.albedo, //albedo variable inside the tex object
-       aoMap: tex.ao,
-       metalnessMap: tex.metalness,
-       normalMap: tex.normal,
-       roughnessMap: tex.roughness,
-       displacementMap: tex.displacement,
+function createMaterial1() {
+   vineMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
+       map: vineTex.albedo, //albedo variable inside the tex object
+       aoMap: vineTex.ao,
+       metalnessMap: vineTex.metalness,
+       normalMap: vineTex.normal,
+       roughnessMap: vineTex.roughness,
+       displacementMap: vineTex.displacement,
        displacementScale: 0.15, //how much extrusion
        side: THREE.FrontSide, //which side of the faces to renders
        // wireframe: true,
    });
 
-   mesh.material = pbrMaterial;
+   mesh.material = vineMaterial;
 }
-
 
 
 //// B) Rotación al scrollear.
@@ -176,8 +176,8 @@ var mouse = {
  
     cof: 0.07,
     gazeRange: {
-        x: 7,
-        y: 7
+        x: 10,
+        y: 10
     }
  }
 
@@ -255,6 +255,12 @@ window.addEventListener("keydown", (event) => {
         pbrMaterial.wireframe = !pbrMaterial.wireframe;
     }
 });
+
+//Make buttons to change textures
+const brickButton = document.getElementById("btn1");
+brickButton.addEventListener("click", createMaterial1, console.log("bricks"));
+const panelButton = document.getElementById("btn2");
+panelButton.addEventListener("click", createMaterial);
 
 /////////
 // Final. Crear loop de animación para renderizar constantemente la escena.

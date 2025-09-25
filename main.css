@@ -16,31 +16,50 @@
 
 button {
     border: none;
-    color: aqua;
     font-family: "Formula", sans-serif;
     text-transform: uppercase;
     font-size: 2vh;
     cursor: pointer;
     padding: 1vh 2vh;
-    border: 0.3vh solid aqua;
+    /*border: 0.3vh solid aqua;*/
     transition: all 0.3s ease;
+    width: 12vh;
+    height: 6vh;
+    margin: 1vh;
+    border-radius: 10px; /* Rounds the corners */
+
 }
 
-button:hover {
-    background-color: aqua;
-    color: #2020cc;
-}
 
 #btn1 {
     position: relative;
     z-index: 10;
-    background-color:rgb(70, 121, 165);
+    background-image: url(./assets/texturas/vines-bl/vines_albedo.png);
+    background-size: cover; /* Ensures the image covers the entire button */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
 }
 
 #btn2 {
     position: relative;
     z-index: 10;
-    background-color:rgb(184, 115, 19);
+    background-image: url(./assets/texturas/metal-panel/vented-metal-panel1_albedo.png);
+    background-size: 200px;
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+}
+
+#btn1:hover {
+    background-color: rgb(255, 187, 187); /* Change background color */
+    mix-blend-mode: overlay;
+    filter: brightness(10);
+}
+
+#btn2:hover {
+    background-color: rgb(255, 214, 214, 0.7); /* Change background color */
+    mix-blend-mode: color-dodge;
+    filter: brightness(1.7);
+
 }
 
 #lienzo {
@@ -73,7 +92,7 @@ footer {
     position: absolute;
     bottom: 0; left: 0;
     width: 100%;
-    mix-blend-mode: luminosity;
+    /*mix-blend-mode: luminosity;*/
 }
 
 .subtitle {
