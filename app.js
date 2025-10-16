@@ -5,8 +5,14 @@ console.log(gsap);
 
 // 2. Configurar canvas.
 const canvas = document.getElementById("lienzo");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
+const sizes = {
+   width: window.innerWidth,
+   height: window.innerHeight
+}
+
+canvas.width = sizes.width;
+canvas.height = sizes.height;
 
 // 3. Configurar escena 3D.
 const scene = new THREE.Scene();
@@ -276,6 +282,23 @@ panelButton.addEventListener("click", () => {
    }
 );
 
+window.addEventListener('resize', () => 
+   {
+       // Update sizes to new window dimensions
+       sizes.width = window.innerWidth; 
+       sizes.height = window.innerHeight;
+
+       // Update camera
+       camera.aspect = sizes.width / sizes.height;
+       camera.updateProjectionMatrix(); // must be called after any change to the camera's properties
+
+       // Update renderer
+       renderer.setSize(sizes.width, sizes.height)
+
+       // Optional: set pixel ratio for better quality on high-DPI screens
+       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+   });
 
 /////////
 // Final. Crear loop de animación para renderizar constantemente la escena.
