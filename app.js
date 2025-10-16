@@ -51,6 +51,8 @@ scene.add(rimLight);
 // 1. "Loading manager".
 const manager = new THREE.LoadingManager(); //create loading manager
 
+const cubeTexLoader = new THREE.CubeTextureLoader(manager);
+
 //define local functions for different manager events
 manager.onStart = function (url, itemsLoaded, itemsTotal) {
    console.log(`Iniciando carga de: ${url} (${itemsLoaded + 1}/${itemsTotal})`);
@@ -93,11 +95,23 @@ const panelTex = {
    displacement: loader.load('./assets/texturas/metal-panel/vented-metal-panel1_height.png'), //extrusion/3d values of texture
 };
 
+const envMap = cubeTexLoader.load([
+   './assets/texturas/cubemap/Storforsen3/posx.jpg', './assets/texturas/cubemap/Storforsen3/negx.jpg', // +X, -X
+   './assets/texturas/cubemap/Storforsen3/posy.jpg', './assets/texturas/cubemap/Storforsen3/negy.jpg', // +Y, -Y
+   './assets/texturas/cubemap/Storforsen3/posz.jpg', './assets/texturas/cubemap/Storforsen3/negz.jpg' // +Z, -Z
+]);
+ 
+scene.background = envMap; //set scene background to envMap
+
+
 // 4. Definimos variables y la función que va a crear el material al cargar las texturas.
 var panelMaterial; //create variable that will hold the material
 //PANELS
 function createMaterial() { 
    panelMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
+      envMap: envMap,
+      metalness: 1,
+      roughness: 0.1,
        map: panelTex.albedo, //albedo variable inside the panelTex object
        aoMap: panelTex.ao,
        metalnessMap: panelTex.metalness,
@@ -117,6 +131,9 @@ var vineMaterial; //create variable that will hold the material
 
 function createMaterial1() {
    vineMaterial = new THREE.MeshStandardMaterial({ //assign all the variables we created to the maps
+      envMap: envMap,
+      metalness: 0.6,
+      roughness: 0.4,
        map: vineTex.albedo, //albedo variable inside the tex object
        aoMap: vineTex.ao,
        metalnessMap: vineTex.metalness,
